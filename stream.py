@@ -3,10 +3,11 @@ from data import *
 import streamlit as st
 import hydralit_components as hc
 import os
+import zipfile
 
 from st_aggrid import AgGrid
 from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.core import Settings, VectorStoreIndex, SimpleDirectoryReader
+from llama_index.core import Settings, VectorStoreIndex, SimpleDirectoryReader, Document
 from llama_index.llms.openai import OpenAI
 
 
@@ -238,12 +239,12 @@ if page == 'eksim':
         fig4b = makeBarChart(df_4b.head(eks_slid), colx = 'kode_prov', coly = 'nilai_mil')
         st.plotly_chart(fig4b, use_container_width = True)
     
-    # eks_col4a, eks_col4b = st.columns([3,2])
-    # with eks_col4a:
-    #     st.plotly_chart(plotSankey(df_sankey, eks_fil1, eks_fil2), use_container_width=True)
-    # with eks_col4b:
-    #     st.plotly_chart(plotSunburst(df_eksim, eks_fil1, eks_fil2), use_container_width=True)
-    # st.plotly_chart(plotTreeMap(data_eks, eks_fil1), use_container_width=True)
+    eks_col4a, eks_col4b = st.columns([3,2])
+    with eks_col4a:
+        st.plotly_chart(plotSankey(df_sankey, eks_fil1, eks_fil2), use_container_width=True)
+    with eks_col4b:
+        st.plotly_chart(plotSunburst(df_eksim, eks_fil1, eks_fil2), use_container_width=True)
+    st.plotly_chart(plotTreeMap(data_eks, eks_fil1), use_container_width=True)
     
 ## ------------------------------ TAB FLBL ------------------------------
 if page == 'flbl':
@@ -393,13 +394,20 @@ if page == 'clust':
 ## ------------------------------ TAB CHATBOT ------------------------------
 if page == 'chat':
     st.header('Chatbot IRIO Indonesia')
+    txts = []
+    
+    zip = zipfile.ZipFile('data/corpus.zip', 'r')
+    for txt in zip.namelist():
+        txts.append(zip.read(txt).decode("utf-8"))
+        
+    documents = [Document(text=t) for t in txts]
     
     api_key = OpenAI(api_key = st.secrets["OPENAI_API_KEY"])
     @st.cache_resource(show_spinner=False)
     def load_data():
         with st.spinner(text="Memuat dan mengindeks korpus – Harap menunggu 1-2 menit."):
-            reader = SimpleDirectoryReader(input_dir="./data/corpus", recursive=True)
-            docs = reader.load_data()
+            # reader = SimpleDirectoryReader(input_dir="./data/corpus", recursive=True)
+            docs = documents
 
             Settings.llm = OpenAI(model="gpt-3.5-turbo")
             Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
