@@ -1,0 +1,12 @@
+streamlit
+streamlit-navigation-bar
+streamlit-aggrid
+plotly
+pandas
+hydralit_components
+numpy
+pyreadr
+scikit-learn
+yellowbrick
+llama_index
+openai
