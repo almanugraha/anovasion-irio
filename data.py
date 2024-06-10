@@ -18,7 +18,6 @@ df_flbl = pr.read_r('data/rds/flbl_detail.rds')[None]
 leontif = pr.read_r("data/rds/leontif.rds")[None]
 base_irio = pr.read_r("data/rds/sim_irio.rds")[None]
 out_irio = pr.read_r("data/rds/out_irio.rds")[None]
-df_produksi = pd.read_csv('data/csv/mat_pdrb.csv', sep=",")
 
 X_FD2 = pd.read_csv('data/csv/X_FD.csv', sep=';')
 X_F2 = pd.read_csv('data/csv/X_F.csv', sep=';')
