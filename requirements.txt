@@ -4,7 +4,7 @@ streamlit-aggrid
 plotly
 pandas
 hydralit_components
-numpy
+numpy==1.26.4
 pyreadr
 scikit-learn
 yellowbrick
